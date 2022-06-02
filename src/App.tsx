@@ -1,22 +1,21 @@
-import { FC } from "react";
 import { Column } from "./components/fc/Column";
-import { Card } from "./components/fc/Card";
 import { AddNewItem } from "./components/fc/AddNewItem";
 import { AppContainer } from "./styles";
+import { useAppState } from "./state/AppStateContext";
+import { addList } from "./state/actions";
 
-export const App: FC = ({ children }) => {
+export const App = () => {
+  const { lists, dispatch } = useAppState();
+
   return (
     <AppContainer>
-      <Column text="To Do">
-        <Card text="Generate app scaffold" />
-      </Column>
-      <Column text="In Progress">
-        <Card text="Learn Tpyescript" />
-      </Column>
-      <Column text="Done">
-        <Card text="Begin to use static typing" />
-      </Column>
-      <AddNewItem toggleButtonText="+ Add nother list" onAdd={console.log} />
+      {lists.map((list) => (
+        <Column text={list.text} key={list.id} id={list.id} />
+      ))}
+      <AddNewItem
+        toggleButtonText="+ Add nother list"
+        onAdd={(text) => dispatch(addList(text))}
+      />
     </AppContainer>
   );
 };
